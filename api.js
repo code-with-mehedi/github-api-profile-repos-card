@@ -7,7 +7,7 @@ form.addEventListener('submit',function (e) {
   const userName = form.elements["username"].value;
   console.log(userName);
   // Get Github User Profile
-  fetch(`https://api.github.com/users/${userName}`)
+  fetch(`https://api.github.com/users/${userName}`, { user: "code-with-mehedi" })
     .then((response) => response.json())
     .then((data) => {
       const authorCard = `
@@ -21,24 +21,26 @@ form.addEventListener('submit',function (e) {
                         <p>${data.bio}</p>
                     </figcaption>
                 </figure>
-                <h2>Repositories by this author</h2>
+                <h2 class="title">Repositories by this author</h2>
             `;
       authorProfileContainer.innerHTML = authorCard;
     })
     .catch((error) => console.log(error));
 
   // Get Github User Repos
-  fetch(`https://api.github.com/users/${userName}/repos`)
+  fetch(`https://api.github.com/users/${userName}/repos?per_page=10`, {
+    user: "code-with-mehedi",
+  })
     .then((response) => response.json())
     .then((repos) => {
-        console.log(repos);
-      const repositories= repos.map((repo)=>{
-        return `<div class="media-man-files-wrapper media-man-file-grid">
+      console.log(repos);
+      const repositories = repos.map((repo) => {
+        return `<div class="media-man-files-wrapper media-man-file-list">
                 <div class="file-thumb">
                     <div class="details">
                         <h4 class="title"> <a href="${repo.html_url}">Repo:${repo.name} </a></h4>
                         <p> Repo Description: ${repo.description}</p>
-                        <span>Languages${repo.language}:</span>
+                        <span>Languages: ${repo.language}:</span>
                     </div>
                 </div>
             </div>`;
